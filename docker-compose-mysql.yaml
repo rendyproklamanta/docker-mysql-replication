@@ -28,6 +28,40 @@ services:
       - "$IP_ADDR:3307:3306"
     networks:
       - db-replication
+  
+  pma:
+    depends_on:
+      - mysql-master
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      - "8000:80"
+    environment:
+      - PMA_HOST=db
+      - UPLOAD_LIMIT=2G
+      - MEMORY_LIMIT=500M
+      - MAX_EXECUTION_TIME=1000
+    networks:
+      - db-replication
+      
+mysql-cron-backup:
+    image: fradelg/mysql-cron-backup
+    depends_on:
+      - mysql-master
+    volumes:
+      - /var/lib/mysql/backup:/backup
+    environment:
+      - TZ=Asia/Jakarta
+      - MYSQL_HOST=mysql-master
+      - MYSQL_USER=root
+      - MYSQL_PASS=${FIRST_ROOT_PASSWORD}
+      - MAX_BACKUPS=10
+      - INIT_BACKUP=1
+      - CRON_TIME=0 0 * * *
+    restart: unless-stopped    
+    networks:
+      - db-replication
       
 networks:
   db-replication:
