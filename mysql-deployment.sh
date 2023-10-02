@@ -22,17 +22,18 @@ master-slave() {
 
 	export FIRST_REPL_USER=${MYSQL_FIRST_REPLICATION_USER:-'repl'}
 
-	export FIRST_REPL_PASSWORD=${MYSQL_FIRST_REPLICATION_PASSWORD:-'qazwsx'}
+	export FIRST_REPL_PASSWORD=${MYSQL_FIRST_REPLICATION_PASSWORD:-'9XLYF850ZlA3'}
 
-	export FIRST_ROOT_PASSWORD=${MYSQL_FIRST_ROOT_PASS:-'qazwsx'}
-	export SECOND_ROOT_PASSWORD=${MYSQL_SECOND_ROOT_PASS:-'qazwsx'}
+	export FIRST_ROOT_PASSWORD=${MYSQL_FIRST_ROOT_PASS:-'L2Wn11UBFlCX'}
+	export SECOND_ROOT_PASSWORD=${MYSQL_SECOND_ROOT_PASS:-'L2Wn11UBFlCX'}
+	export USER_SLAVE_PASSWORD=${MYSQL_USER_SLAVE_PASSWORD:-'OFv93xF9GgcD'}
 	
 	export FIRST_HOST=${MYSQL_FIRST_HOST:-'db-master'}
 	export SECOND_HOST=${MYSQL_SECOND_HOST:-'db-slave'}
 	
 	export IP_ADDR=${DOCKER0_IP:-$(ip a show dev docker0 |grep inet|awk '{print $2}'|awk -F\/ '{print $1}'|grep -v ::)}
 
-	docker-compose -f docker-compose-mysql.yaml up -d
+	docker-compose -f docker-compose-mysql.yaml up -d --force-recreate
 
 	echo
 	echo waiting 30s for containers to be up and running...
@@ -43,22 +44,23 @@ master-slave() {
 	# Create user on master database.
 	docker exec $FIRST_HOST \
 			mysql -u root --password=$FIRST_ROOT_PASSWORD \
-			--execute="create user '$FIRST_REPL_USER'@'%' identified by '$FIRST_REPL_PASSWORD';\
+			--execute="CREATE USER IF NOT EXISTS '$FIRST_REPL_USER'@'%' identified by '$FIRST_REPL_PASSWORD';\
 			grant replication slave on *.* to '$FIRST_REPL_USER'@'%';\
 			flush privileges;"
-
 
 	# Get the log position and name.
 	result=$(docker exec $FIRST_HOST mysql -u root --password=$FIRST_ROOT_PASSWORD --execute="show master status;")
 	log=$(echo $result|awk '{print $6}')
 	position=$(echo $result|awk '{print $7}')
 
-
 	# Connect slave to master.
 	docker exec $SECOND_HOST \
 			mysql -u root --password=$SECOND_ROOT_PASSWORD \
 			--execute="stop slave;\
 			reset slave;\
+   			CREATE USER IF NOT EXISTS 'usr_slave'@'%' identified by '$USER_SLAVE_PASSWORD';\
+                        GRANT SELECT ON *.* TO 'usr_slave'@'%';\
+                        FLUSH PRIVILEGES;\
 			CHANGE MASTER TO MASTER_HOST='$FIRST_HOST', MASTER_USER='$FIRST_REPL_USER', \
 			MASTER_PASSWORD='$FIRST_REPL_PASSWORD', MASTER_LOG_FILE='$log', MASTER_LOG_POS=$position;\
 			start slave;\
@@ -84,18 +86,18 @@ master-master() {
         export SECOND_REPL_USER=${MYSQL_SECOND_REPLICATION_USER:-'repl-master2'}
         export FIRST_REPL_USER=${MYSQL_FIRST_REPLICATION_USER:-'repl-master1'}
 
-        export FIRST_REPL_PASSWORD=${MYSQL_FIRST_REPLICATION_PASSWORD:-'qazwsx'}
-        export SECOND_REPL_PASSWORD=${MYSQL_SECOND_REPLICATION_PASSWORD:-'qazwsx'}
+        export FIRST_REPL_PASSWORD=${MYSQL_FIRST_REPLICATION_PASSWORD:-'73nN2gARQlF4'}
+        export SECOND_REPL_PASSWORD=${MYSQL_SECOND_REPLICATION_PASSWORD:-'73nN2gARQlF4'}
 
-        export FIRST_ROOT_PASSWORD=${MYSQL_FIRST_ROOT_PASS:-'qazwsx'}
-        export SECOND_ROOT_PASSWORD=${MYSQL_SECOND_ROOT_PASS:-'qazwsx'}
+        export FIRST_ROOT_PASSWORD=${MYSQL_FIRST_ROOT_PASS:-'En6tZ200ozRL'}
+        export SECOND_ROOT_PASSWORD=${MYSQL_SECOND_ROOT_PASS:-'En6tZ200ozRL'}
 
         export FIRST_HOST=${MYSQL_FIRST_HOST:-'db-master1'}
         export SECOND_HOST=${MYSQL_SECOND_HOST:-'db-master2'}
 
         export IP_ADDR=${DOCKER0_IP:-$(ip a show dev docker0 |grep inet|awk '{print $2}'|awk -F\/ '{print $1}'|grep -v ::)}
 
-        docker-compose -f docker-compose-mysql.yaml up -d
+        docker-compose -f docker-compose-mysql.yaml up -d --force-recreate
 
         echo
         echo waiting 30s for containers to be up and running...
