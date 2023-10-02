@@ -1,0 +1,23 @@
+# mysql automated replication by Hosein Yousefi <yousefi.hosein.o@gmail.com>
+# GITHUB: https://github.com/hosein-yousefii
+
+
+[mysqld]
+default_authentication_plugin= mysql_native_password
+
+# These configs are mandatory, Don't change them.
+server-id       = 2
+bind-address    = 0.0.0.0
+log_bin         = /var/lib/mysql/mysql-bin.log
+log_bin_index   = /var/lib/mysql/mysql-bin.log.index
+relay_log       = /var/lib/mysql/mysql-relay-bin
+relay_log_index = /var/lib/mysql/mysql-relay-bin.index
+read_only       = ON
+#super_read_only=ON
+
+# You can add other configs below
+max_allowed_packet      = 500M
+innodb_buffer_pool_size = 2G
+wait_timeout            = 300
+interactive_timeout     = 300
+max_connections         = 500

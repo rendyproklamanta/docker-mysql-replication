@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     volumes:
       - '/var/lib/mysql/master:/var/lib/mysql'
-      - './first-host.cnf:/etc/mysql/conf.d/mysql.cnf'
+      - './hosts/server1.cnf:/etc/mysql/conf.d/mysql.cnf'
     environment:
       MYSQL_ROOT_PASSWORD: $FIRST_ROOT_PASSWORD
     ports:
@@ -21,7 +21,7 @@ services:
     restart: unless-stopped
     volumes:
       - '/var/lib/mysql/slave:/var/lib/mysql'
-      - './second-host.cnf:/etc/mysql/conf.d/mysql.cnf'
+      - './hosts/server2.cnf:/etc/mysql/conf.d/mysql.cnf'
     environment:
       MYSQL_ROOT_PASSWORD: $SECOND_ROOT_PASSWORD
     ports:
@@ -45,7 +45,7 @@ services:
     networks:
       - db-replication
       
-mysql-cron-backup:
+  mysql-cron-backup:
     image: fradelg/mysql-cron-backup
     depends_on:
       - mysql-master
@@ -56,9 +56,9 @@ mysql-cron-backup:
       - MYSQL_HOST=mysql-master
       - MYSQL_USER=root
       - MYSQL_PASS=${FIRST_ROOT_PASSWORD}
-      - MAX_BACKUPS=10
-      - INIT_BACKUP=1
-      - CRON_TIME=0 0 * * *
+      - MAX_BACKUPS=4
+      - INIT_BACKUP=0
+      - CRON_TIME=0 */6 * * *
     restart: unless-stopped    
     networks:
       - db-replication

@@ -31,9 +31,10 @@ master-slave() {
 	export FIRST_HOST=${MYSQL_FIRST_HOST:-'db-master'}
 	export SECOND_HOST=${MYSQL_SECOND_HOST:-'db-slave'}
 	
-	export IP_ADDR=${DOCKER0_IP:-$(ip a show dev docker0 |grep inet|awk '{print $2}'|awk -F\/ '{print $1}'|grep -v ::)}
+	#export IP_ADDR=${DOCKER0_IP:-$(ip a show dev docker0 |grep inet|awk '{print $2}'|awk -F\/ '{print $1}'|grep -v ::)}
+        export IP_ADDR=0.0.0.0
 
-	docker-compose -f docker-compose-mysql.yaml up -d --force-recreate
+	docker-compose -f docker-compose.yaml up -d --force-recreate
 
 	echo
 	echo waiting 30s for containers to be up and running...
@@ -95,9 +96,10 @@ master-master() {
         export FIRST_HOST=${MYSQL_FIRST_HOST:-'db-master1'}
         export SECOND_HOST=${MYSQL_SECOND_HOST:-'db-master2'}
 
-        export IP_ADDR=${DOCKER0_IP:-$(ip a show dev docker0 |grep inet|awk '{print $2}'|awk -F\/ '{print $1}'|grep -v ::)}
+        #export IP_ADDR=${DOCKER0_IP:-$(ip a show dev docker0 |grep inet|awk '{print $2}'|awk -F\/ '{print $1}'|grep -v ::)}
+        export IP_ADDR=0.0.0.0
 
-        docker-compose -f docker-compose-mysql.yaml up -d --force-recreate
+        docker-compose -f docker-compose.yaml up -d --force-recreate
 
         echo
         echo waiting 30s for containers to be up and running...
@@ -124,11 +126,9 @@ master-master() {
         master1_log=$(echo $master1_result|awk '{print $6}')
         master1_position=$(echo $master1_result|awk '{print $7}')
 
-
         master2_result=$(docker exec $SECOND_HOST mysql -u root --password=$SECOND_ROOT_PASSWORD --execute="show master status;")
         master2_log=$(echo $master2_result|awk '{print $6}')
         master2_position=$(echo $master2_result|awk '{print $7}')
-
 
         # Connect slave to master.
         docker exec $SECOND_HOST \
