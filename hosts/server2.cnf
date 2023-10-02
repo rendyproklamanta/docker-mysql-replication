@@ -8,12 +8,11 @@ default_authentication_plugin= mysql_native_password
 # These configs are mandatory, Don't change them.
 server-id       = 2
 bind-address    = 0.0.0.0
-log_bin         = /var/lib/mysql/mysql-bin.log
-log_bin_index   = /var/lib/mysql/mysql-bin.log.index
-relay_log       = /var/lib/mysql/mysql-relay-bin
-relay_log_index = /var/lib/mysql/mysql-relay-bin.index
-read_only       = ON
-#super_read_only=ON
+binlog-format   = mixed
+log-bin         = mysql-bin
+relay-log       = mysql-relay-bin
+read-only       = 1
+#super_read_only=1
 
 # You can add other configs below
 max_allowed_packet      = 500M

@@ -110,13 +110,13 @@ master-master() {
         # Create user on master database.
         docker exec $FIRST_HOST \
                         mysql -u root --password=$FIRST_ROOT_PASSWORD \
-                        --execute="create user '$FIRST_REPL_USER'@'%' identified by '$FIRST_REPL_PASSWORD';\
+                        --execute="CREATE USER IF NOT EXISTS '$FIRST_REPL_USER'@'%' identified by '$FIRST_REPL_PASSWORD';\
                         grant replication slave on *.* to '$FIRST_REPL_USER'@'%';\
                         flush privileges;"
 
         docker exec $SECOND_HOST \
                         mysql -u root --password=$SECOND_ROOT_PASSWORD \
-                        --execute="create user '$SECOND_REPL_USER'@'%' identified by '$SECOND_REPL_PASSWORD';\
+                        --execute="CREATE USER IF NOT EXISTS '$SECOND_REPL_USER'@'%' identified by '$SECOND_REPL_PASSWORD';\
                         grant replication slave on *.* to '$SECOND_REPL_USER'@'%';\
                         flush privileges;"
 
