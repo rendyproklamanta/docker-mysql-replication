@@ -117,6 +117,19 @@ export REPLICATION_METHOD=master-slave
 ./mysql-deployment.sh
 ```
 
+## Re-sync slave if down or crash:
+```
+# backup single db
+docker exec [container_id] /usr/bin/mysqldump -u root --password=[your_password] --triggers --routines --skip-lock-tables --single-transaction [table_name] > [table_name].sql
+# import single db
+docker exec [container_id] mysql -u root --password=[your_password] [table_name] < [table_name].sql
+
+
+# backup all dbs
+docker exec [container_id] /usr/bin/mysqldump -u root --password=[your_password] --triggers --routines --skip-lock-tables --single-transaction --all-databases > all_db.sql
+# import all dbs
+docker exec [container_id] mysql -u root --password=[your_password] < all_db.sql
+```
 
 # How to contribute:
 
