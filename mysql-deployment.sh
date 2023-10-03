@@ -26,6 +26,7 @@ master-slave() {
 
 	export FIRST_ROOT_PASSWORD=${MYSQL_FIRST_ROOT_PASS:-'L2Wn11UBFlCX'}
 	export SECOND_ROOT_PASSWORD=${MYSQL_SECOND_ROOT_PASS:-'L2Wn11UBFlCX'}
+	export USER_MASTER_PASSWORD=${MYSQL_USER_MASTER_PASSWORD:-'o8E36GEMNQGg'}
 	export USER_SLAVE_PASSWORD=${MYSQL_USER_SLAVE_PASSWORD:-'OFv93xF9GgcD'}
 	
 	export FIRST_HOST=${MYSQL_FIRST_HOST:-'db-master'}
@@ -47,7 +48,9 @@ master-slave() {
 			mysql -u root --password=$FIRST_ROOT_PASSWORD \
 			--execute="CREATE USER IF NOT EXISTS '$FIRST_REPL_USER'@'%' identified by '$FIRST_REPL_PASSWORD';\
 			grant replication slave on *.* to '$FIRST_REPL_USER'@'%';\
-			flush privileges;"
+      			CREATE USER IF NOT EXISTS 'usr_master'@'%' identified by '$USER_MASTER_PASSWORD';\
+			GRANT ALL PRIVILEGES ON *.* TO 'usr_master'@'%' WITH GRANT OPTION;
+			FLUSH PRIVILEGES;"
 
 	# Get the log position and name.
 	result=$(docker exec $FIRST_HOST mysql -u root --password=$FIRST_ROOT_PASSWORD --execute="show master status;")
@@ -59,8 +62,8 @@ master-slave() {
 			mysql -u root --password=$SECOND_ROOT_PASSWORD \
 			--execute="stop slave;\
 			reset slave;\
-   			CREATE USER IF NOT EXISTS 'usr_slave'@'%' identified by '$USER_SLAVE_PASSWORD';\
-                        GRANT SELECT ON *.* TO 'usr_slave'@'%';\
+   			CREATE USER IF NOT EXISTS 'usr_read'@'%' identified by '$USER_SLAVE_PASSWORD';\
+                        GRANT SELECT ON *.* TO 'usr_read'@'%';\
                         FLUSH PRIVILEGES;\
 			CHANGE MASTER TO MASTER_HOST='$FIRST_HOST', MASTER_USER='$FIRST_REPL_USER', \
 			MASTER_PASSWORD='$FIRST_REPL_PASSWORD', MASTER_LOG_FILE='$log', MASTER_LOG_POS=$position;\
