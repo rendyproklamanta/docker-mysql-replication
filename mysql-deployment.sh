@@ -14,7 +14,14 @@
 master-slave() {
 
 	echo
-	echo starting deploying...
+	echo Preparing prerequisite...
+	echo
+
+ 	sudo curl -L https://github.com/docker/compose/releases/download/v2.18.1/docker-compose-`uname -s`-`uname -m` -o /usr/bin/docker-compose
+    	sudo chmod +x /usr/bin/docker-compose
+ 
+	echo
+	echo Starting deploying...
 	echo
 
 	export FIRST_DB_NAME=${MYSQL_FIRST_DB_NAME:-'db-master'}
@@ -80,6 +87,13 @@ master-slave() {
 
 master-master() {
 
+	echo
+	echo Preparing prerequisite...
+	echo
+
+ 	sudo curl -L https://github.com/docker/compose/releases/download/v2.18.1/docker-compose-`uname -s`-`uname -m` -o /usr/bin/docker-compose
+    	sudo chmod +x /usr/bin/docker-compose
+     
         echo
         echo starting deploying...
 	echo
