@@ -119,20 +119,24 @@ export REPLICATION_METHOD=master-slave
 
 ## Re-sync slave if down or crash:
 ```
-# backup single db
-docker exec [container_id] /usr/bin/mysqldump -u root --password=[your_password] --triggers --routines --skip-lock-tables --single-transaction [table_name] > [table_name].sql
-# import single db
-docker exec [container_id] mysql -u root --password=[your_password] [table_name] < [table_name].sql
+# install pipeviewer first time
+apt install pv
 
+# backup single db
+docker exec [container_id] mysqldump -uroot --password=[your_password] --triggers --routines --skip-lock-tables --single-transaction [db_name] | pv -W > [db_name] .sql
+# import single db
+pv [db_name].sql | docker exec -i [container_id] mysql -uroot --password=[your_password] [db_name]
 
 # backup all dbs
-docker exec [container_id] /usr/bin/mysqldump -u root --password=[your_password] --triggers --routines --skip-lock-tables --single-transaction --all-databases > all_db.sql
+docker exec [container_id] mysqldump -uroot --password=[your_password] --triggers --routines --skip-lock-tables --single-transaction --all-databases | pv -W > all_db.sql
 # import all dbs
-docker exec [container_id] mysql -u root --password=[your_password] < all_db.sql
+pv all_db.sql | docker exec -i [container_id] mysql -uroot --password=[your_password]
 ```
 
-# How to contribute:
+## Open URL PhpMyAdmin:
+http://192.168.1.1:8000 (Your IP Address)
 
+## How to contribute:
 You are able to add other features related to this stack or expand it, it would be great to implement a replication for running instances.
 Copyright 2021 Hosein Yousefi <yousefi.hosein.o@gmail.com>
 

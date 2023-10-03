@@ -8,8 +8,10 @@ default_authentication_plugin= mysql_native_password
 # These configs are mandatory, Don't change them.
 server-id       = 1
 bind-address    = 0.0.0.0
-log-bin         = mysql-bin  
+sql-mode        = 
 binlog-format   = mixed
+log-bin         = mysql-bin
+log_bin_trust_function_creators = 1
 
 # You can add other configs below
 max_allowed_packet      = 500M
