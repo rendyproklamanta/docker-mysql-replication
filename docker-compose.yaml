@@ -9,6 +9,7 @@ services:
       - '/var/lib/mysql/master:/var/lib/mysql'
       - './hosts/server1.cnf:/etc/mysql/conf.d/mysql.cnf'
     environment:
+      TZ: "Asia/jakarta"
       MYSQL_ROOT_PASSWORD: $FIRST_ROOT_PASSWORD
     ports:
       - "$IP_ADDR:3306:3306"
@@ -23,6 +24,7 @@ services:
       - '/var/lib/mysql/slave:/var/lib/mysql'
       - './hosts/server2.cnf:/etc/mysql/conf.d/mysql.cnf'
     environment:
+      TZ: "Asia/jakarta"
       MYSQL_ROOT_PASSWORD: $SECOND_ROOT_PASSWORD
     ports:
       - "$IP_ADDR:3307:3306"
@@ -38,6 +40,7 @@ services:
     ports:
       - "8000:80"
     environment:
+      - TZ=Asia/Jakarta
       - PMA_HOST=mysql-master
       - UPLOAD_LIMIT=2G
       - MEMORY_LIMIT=500M
@@ -46,9 +49,11 @@ services:
       - db-replication
       
   mysql-cron-backup:
-    image: fradelg/mysql-cron-backup
     depends_on:
       - mysql-master
+    image: fradelg/mysql-cron-backup
+    container_name: mysql-cron-backup
+    restart: unless-stopped    
     volumes:
       - /var/lib/mysql/backup:/backup
     environment:
@@ -59,7 +64,6 @@ services:
       - MAX_BACKUPS=4
       - INIT_BACKUP=0
       - CRON_TIME=0 */6 * * *
-    restart: unless-stopped    
     networks:
       - db-replication
       

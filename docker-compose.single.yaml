@@ -1,0 +1,58 @@
+version: '3'
+
+services:
+  mysql:
+    container_name: mysql
+    image: mysql:latest
+    restart: unless-stopped
+    volumes:
+      - '/var/lib/mysql/data:/var/lib/mysql'
+      - './hosts/server1.cnf:/etc/mysql/conf.d/mysql.cnf'
+    environment:
+      - TZ=Asia/Jakarta
+      - MYSQL_ROOT_PASSWORD=L2Wn11UBFlCX
+    ports:
+      - "3306:3306"
+    networks:
+      - mysql
+
+  pma:
+    depends_on:
+      - mysql
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      - "8000:80"
+    environment:
+      - TZ=Asia/Jakarta
+      - PMA_HOST=mysql
+      - UPLOAD_LIMIT=5G
+      - MEMORY_LIMIT=500M
+      - MAX_EXECUTION_TIME=1000
+    networks:
+      - mysql
+
+  mysql-cron-backup:
+    depends_on:
+      - mysql
+    image: fradelg/mysql-cron-backup
+    container_name: mysql-cron-backup
+    volumes:
+      - /var/lib/mysql/backup:/backup
+    environment:
+      - TZ=Asia/Jakarta
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=root
+      - MYSQL_PASS=L2Wn11UBFlCX
+      - MAX_BACKUPS=4
+      - INIT_BACKUP=0
+      - CRON_TIME=0 */6 * * *
+    restart: unless-stopped    
+    networks:
+      - mysql
+      
+networks:
+  mysql:
+    name: mysql
+    driver: bridge

@@ -133,6 +133,11 @@ docker exec [container_id] mysqldump -uroot --password=[your_password] --trigger
 pv all_db.sql | docker exec -i [container_id] mysql -uroot --password=[your_password]
 ```
 
+## Compose single instance
+```
+docker-compose up -d --force-recreate -f docker-compose.single.yaml
+```
+
 ## Open URL PhpMyAdmin:
 http://192.168.1.1:8000 (Your IP Address)
 
