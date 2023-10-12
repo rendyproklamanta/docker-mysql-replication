@@ -135,7 +135,7 @@ pv all_db.sql | docker exec -i [container_id] mysql -uroot --password=[your_pass
 
 ## Compose single instance
 ```
-docker-compose up -d --force-recreate -f docker-compose.single.yaml
+docker-compose -f docker-compose.single.yaml up -d --force-recreate
 ```
 
 ## Open URL PhpMyAdmin:
