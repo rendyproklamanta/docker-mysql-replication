@@ -28,10 +28,10 @@ There are several variables which is your replication configuration, and all of 
 
 ```bash
 # First DB container name.
-export MYSQL_FIRST_DB_NAME='db-master'
+export MYSQL_FIRST_DB_NAME='mysql-master'
 
 # Second DB container name.
-export MYSQL_SECOND_DB_NAME='db-slave'
+export MYSQL_SECOND_DB_NAME='mysql-slave'
 
 # User on master container for repliation.
 export MYSQL_FIRST_REPLICATION_USER='repl'
@@ -46,10 +46,10 @@ export MYSQL_FIRST_ROOT_PASS='qazwsx'
 export MYSQL_SECOND_ROOT_PASS='qazwsx'
 
 # Master container address (it depends on the container name "MYSQL_FIRST_DB_NAME" and should be same. You can specify IP addr instead "NOT RECOMMENDED").
-export MYSQL_FIRST_HOST='db-master'
+export MYSQL_FIRST_HOST='mysql-master'
 
 # Slave container address (it depends on the container name "MYSQL_SECOND_DB_NAME" and should be same. You can specify IP addr instead "NOT RECOMMENDED").
-export MYSQL_SECOND_HOST='db-slave'
+export MYSQL_SECOND_HOST='mysql-slave'
 
 # Your docker bridge IP addr on host.
 export DOCKER0_IP='172.17.0.1'
@@ -72,10 +72,10 @@ Like master-slave replication, several variables exist for master-master replica
 
 ```bash
 # First DB container name.
-export MYSQL_FIRST_DB_NAME='db-master1'
+export MYSQL_FIRST_DB_NAME='mysql-master1'
 
 # Second DB container name.
-export MYSQL_SECOND_DB_NAME='db-master2'
+export MYSQL_SECOND_DB_NAME='mysql-master2'
 
 # User on master1 container for repliation.
 export MYSQL_FIRST_REPLICATION_USER='repl-master1'
@@ -96,10 +96,10 @@ export MYSQL_FIRST_ROOT_PASS='qazwsx'
 export MYSQL_SECOND_ROOT_PASS='qazwsx'
 
 # Master container address (it depends on the container name "MYSQL_FIRST_DB_NAME" and should be same. You can specify IP addr instead "NOT RECOMMENDED").
-export MYSQL_FIRST_HOST='db-master1'
+export MYSQL_FIRST_HOST='mysql-master1'
 
 # Slave container address (it depends on the container name "MYSQL_SECOND_DB_NAME" and should be same. You can specify IP addr instead "NOT RECOMMENDED").
-export MYSQL_SECOND_HOST='db-master2'
+export MYSQL_SECOND_HOST='mysql-master2'
 
 # Your docker bridge IP addr on host.
 export DOCKER0_IP='172.17.0.1'
@@ -119,7 +119,7 @@ export REPLICATION_METHOD=master-slave
 
 ## Re-sync slave if down or crash:
 ```
-# install pipeviewer first time
+# install pipeviewer for first time only
 apt install pv
 
 # backup single db
@@ -144,4 +144,3 @@ http://192.168.1.1:8000 (Your IP Address)
 ## How to contribute:
 You are able to add other features related to this stack or expand it, it would be great to implement a replication for running instances.
 Copyright 2021 Hosein Yousefi <yousefi.hosein.o@gmail.com>
-

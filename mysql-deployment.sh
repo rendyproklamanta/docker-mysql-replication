@@ -9,9 +9,10 @@
 # FORINSTANCE:
 # export REPLICATION_METHOD=master-master
 
-
-
 master-slave() {
+
+        # from the .env file into the script's environment.
+        source .env
 
 	echo
 	echo Preparing prerequisite...
@@ -24,20 +25,20 @@ master-slave() {
 	echo Starting deploying...
 	echo
 
-	export FIRST_DB_NAME=${MYSQL_FIRST_DB_NAME:-'db-master'}
-	export SECOND_DB_NAME=${MYSQL_SECOND_DB_NAME:-'db-slave'}
+	export FIRST_DB_NAME=${MYSQL_FIRST_DB_NAME:-'mysql-master'}
+	export SECOND_DB_NAME=${MYSQL_SECOND_DB_NAME:-'mysql-slave'}
 
 	export FIRST_REPL_USER=${MYSQL_FIRST_REPLICATION_USER:-'repl'}
 
-	export FIRST_REPL_PASSWORD=${MYSQL_FIRST_REPLICATION_PASSWORD:-'9XLYF850ZlA3'}
+	export FIRST_REPL_PASSWORD=${MYSQL_FIRST_REPLICATION_PASSWORD}
 
-	export FIRST_ROOT_PASSWORD=${MYSQL_FIRST_ROOT_PASS:-'L2Wn11UBFlCX'}
-	export SECOND_ROOT_PASSWORD=${MYSQL_SECOND_ROOT_PASS:-'L2Wn11UBFlCX'}
-	export USER_MASTER_PASSWORD=${MYSQL_USER_MASTER_PASSWORD:-'o8E36GEMNQGg'}
-	export USER_SLAVE_PASSWORD=${MYSQL_USER_SLAVE_PASSWORD:-'OFv93xF9GgcD'}
+	export FIRST_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+	export SECOND_ROOT_PASSWORD=${MYSQL_ROOT_SECOND_PASSWORD}
+	export USER_MASTER_PASSWORD=${MYSQL_USER_MASTER_PASSWORD}
+	export USER_SLAVE_PASSWORD=${MYSQL_USER_SLAVE_PASSWORD}
 	
-	export FIRST_HOST=${MYSQL_FIRST_HOST:-'db-master'}
-	export SECOND_HOST=${MYSQL_SECOND_HOST:-'db-slave'}
+	export FIRST_HOST=${MYSQL_FIRST_HOST:-'mysql-master'}
+	export SECOND_HOST=${MYSQL_SECOND_HOST:-'mysql-slave'}
 	
 	#export IP_ADDR=${DOCKER0_IP:-$(ip a show dev docker0 |grep inet|awk '{print $2}'|awk -F\/ '{print $1}'|grep -v ::)}
         export IP_ADDR=0.0.0.0
@@ -87,6 +88,9 @@ master-slave() {
 
 master-master() {
 
+        # from the .env file into the script's environment.
+        source .env
+
 	echo
 	echo Preparing prerequisite...
 	echo
@@ -98,20 +102,20 @@ master-master() {
         echo starting deploying...
 	echo
 
-        export FIRST_DB_NAME=${MYSQL_FIRST_DB_NAME:-'db-master1'}
-        export SECOND_DB_NAME=${MYSQL_SECOND_DB_NAME:-'db-master2'}
+        export FIRST_DB_NAME=${MYSQL_FIRST_DB_NAME:-'mysql-master1'}
+        export SECOND_DB_NAME=${MYSQL_SECOND_DB_NAME:-'mysql-master2'}
 
         export SECOND_REPL_USER=${MYSQL_SECOND_REPLICATION_USER:-'repl-master2'}
         export FIRST_REPL_USER=${MYSQL_FIRST_REPLICATION_USER:-'repl-master1'}
 
-        export FIRST_REPL_PASSWORD=${MYSQL_FIRST_REPLICATION_PASSWORD:-'73nN2gARQlF4'}
-        export SECOND_REPL_PASSWORD=${MYSQL_SECOND_REPLICATION_PASSWORD:-'73nN2gARQlF4'}
+        export FIRST_REPL_PASSWORD=${MYSQL_FIRST_REPLICATION_PASSWORD}
+        export SECOND_REPL_PASSWORD=${MYSQL_SECOND_REPLICATION_PASSWORD}
 
-        export FIRST_ROOT_PASSWORD=${MYSQL_FIRST_ROOT_PASS:-'En6tZ200ozRL'}
-        export SECOND_ROOT_PASSWORD=${MYSQL_SECOND_ROOT_PASS:-'En6tZ200ozRL'}
+        export FIRST_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+        export SECOND_ROOT_PASSWORD=${MYSQL_ROOT_SECOND_PASSWORD}
 
-        export FIRST_HOST=${MYSQL_FIRST_HOST:-'db-master1'}
-        export SECOND_HOST=${MYSQL_SECOND_HOST:-'db-master2'}
+        export FIRST_HOST=${MYSQL_FIRST_HOST:-'mysql-master1'}
+        export SECOND_HOST=${MYSQL_SECOND_HOST:-'mysql-master2'}
 
         #export IP_ADDR=${DOCKER0_IP:-$(ip a show dev docker0 |grep inet|awk '{print $2}'|awk -F\/ '{print $1}'|grep -v ::)}
         export IP_ADDR=0.0.0.0
@@ -221,5 +225,3 @@ case ${METHOD} in
         ;;
 
 esac
-
-

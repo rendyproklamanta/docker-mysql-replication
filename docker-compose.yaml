@@ -16,7 +16,7 @@ services:
     networks:
       - db-replication
 
-  mysql-slave:
+  mysql-second:
     container_name: $SECOND_DB_NAME
     image: mysql:latest
     restart: unless-stopped

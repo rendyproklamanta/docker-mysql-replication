@@ -5,12 +5,14 @@ services:
     container_name: mysql
     image: mysql:latest
     restart: unless-stopped
+    env_file:
+      - .env
     volumes:
       - '/var/lib/mysql/data:/var/lib/mysql'
       - './hosts/server1.cnf:/etc/mysql/conf.d/mysql.cnf'
     environment:
       - TZ=Asia/Jakarta
-      - MYSQL_ROOT_PASSWORD=L2Wn11UBFlCX
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     ports:
       - "3306:3306"
     networks:
@@ -38,17 +40,19 @@ services:
       - mysql
     image: fradelg/mysql-cron-backup
     container_name: mysql-cron-backup
+    restart: unless-stopped    
+    env_file:
+      - .env
     volumes:
       - /var/lib/mysql/backup:/backup
     environment:
       - TZ=Asia/Jakarta
       - MYSQL_HOST=mysql
       - MYSQL_USER=root
-      - MYSQL_PASS=L2Wn11UBFlCX
+      - MYSQL_PASS=${MYSQL_ROOT_PASSWORD}
       - MAX_BACKUPS=4
       - INIT_BACKUP=0
       - CRON_TIME=0 */6 * * *
-    restart: unless-stopped    
     networks:
       - mysql
       
