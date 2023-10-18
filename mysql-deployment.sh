@@ -34,7 +34,9 @@ master-slave() {
 
 	export FIRST_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
 	export SECOND_ROOT_PASSWORD=${MYSQL_ROOT_SECOND_PASSWORD}
+	export USER_MASTER_USERNAME=${MYSQL_USER_MASTER_USERNAME}
 	export USER_MASTER_PASSWORD=${MYSQL_USER_MASTER_PASSWORD}
+	export USER_SLAVE_USERNAME=${MYSQL_USER_SLAVE_USERNAME}
 	export USER_SLAVE_PASSWORD=${MYSQL_USER_SLAVE_PASSWORD}
 	
 	export FIRST_HOST=${MYSQL_FIRST_HOST:-'mysql-master'}
@@ -56,8 +58,8 @@ master-slave() {
 			mysql -u root --password=$FIRST_ROOT_PASSWORD \
 			--execute="CREATE USER IF NOT EXISTS '$FIRST_REPL_USER'@'%' identified by '$FIRST_REPL_PASSWORD';\
 			grant replication slave on *.* to '$FIRST_REPL_USER'@'%';\
-      			CREATE USER IF NOT EXISTS 'usr_master'@'%' identified by '$USER_MASTER_PASSWORD';\
-			GRANT ALL PRIVILEGES ON *.* TO 'usr_master'@'%' WITH GRANT OPTION;
+      			CREATE USER IF NOT EXISTS '$USER_MASTER_USERNAME'@'%' identified by '$USER_MASTER_PASSWORD';\
+			GRANT ALL PRIVILEGES ON *.* TO '$USER_MASTER_USERNAME'@'%' WITH GRANT OPTION;
 			FLUSH PRIVILEGES;"
 
 	# Get the log position and name.
@@ -70,8 +72,8 @@ master-slave() {
 			mysql -u root --password=$SECOND_ROOT_PASSWORD \
 			--execute="stop slave;\
 			reset slave;\
-   			CREATE USER IF NOT EXISTS 'usr_read'@'%' identified by '$USER_SLAVE_PASSWORD';\
-                        GRANT SELECT ON *.* TO 'usr_read'@'%';\
+   			CREATE USER IF NOT EXISTS '$USER_SLAVE_USERNAME'@'%' identified by '$USER_SLAVE_PASSWORD';\
+                        GRANT SELECT ON *.* TO '$USER_SLAVE_USERNAME'@'%';\
                         FLUSH PRIVILEGES;\
 			CHANGE MASTER TO MASTER_HOST='$FIRST_HOST', MASTER_USER='$FIRST_REPL_USER', \
 			MASTER_PASSWORD='$FIRST_REPL_PASSWORD', MASTER_LOG_FILE='$log', MASTER_LOG_POS=$position;\
