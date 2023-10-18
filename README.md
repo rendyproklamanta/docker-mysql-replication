@@ -22,7 +22,7 @@ MYSQL master-master replication allows data to be copied from either server to t
 
 ### Steps
 - Rename .env.example to .env
-- Edit [.env](.env) file variable as yours
+- Edit [mysql.env](mysql.env) file variable as yours
 - Edit [mysql-deployment.sh](mysql-deployment.sh) with your custom configuration
 
 # Get started with master-slave:

@@ -6,7 +6,7 @@ services:
     image: mysql:latest
     restart: unless-stopped
     env_file:
-      - .env
+      - ./mysql.env
     volumes:
       - '/var/lib/mysql/data:/var/lib/mysql'
       - './hosts/server1.cnf:/etc/mysql/conf.d/mysql.cnf'
@@ -42,7 +42,7 @@ services:
     container_name: mysql-cron-backup
     restart: unless-stopped    
     env_file:
-      - .env
+      - ./mysql.env
     volumes:
       - /var/lib/mysql/backup:/backup
     environment:

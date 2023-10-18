@@ -11,8 +11,8 @@
 
 master-slave() {
 
-        # from the .env file into the script's environment.
-        source .env
+        # load env file into the script's environment.
+        source mysql.env
 
 	echo
 	echo Preparing prerequisite...
@@ -90,8 +90,8 @@ master-slave() {
 
 master-master() {
 
-        # from the .env file into the script's environment.
-        source .env
+        # load env file into the script's environment.
+        source mysql.env
 
 	echo
 	echo Preparing prerequisite...
