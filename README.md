@@ -1,6 +1,5 @@
-# MySQL-replication-docker-stack
+# MySQL-replication-docker
 MYSQL automated master-master, master-slave docker compose replication
-
 
 [![GitHub license](https://img.shields.io/github/license/hosein-yousefii/MySQL-replication-docker-stack)](https://github.com/hosein-yousefii/MySQL-replication-docker-stack/blob/master/LICENSE)
 ![LinkedIn](https://shields.io/badge/style-hoseinyousefii-black?logo=linkedin&label=LinkedIn&link=https://www.linkedin.com/in/hoseinyousefi)
@@ -19,6 +18,15 @@ MySQL replication is the process by which a single data set, stored in a MySQL d
 ### What is master-master replication?
 
 MYSQL master-master replication allows data to be copied from either server to the other one. This subtle but important difference allows us to perform mysql read or writes from either server. This configuration adds redundancy and increases efficiency when dealing with accessing the data.
+
+### What is ProxySQL
+
+ProxySQL is an open-source high-performance database proxy. It acts as an intermediary between database clients and database servers, providing various features to improve the performance, scalability, and manageability of database systems.
+
+### Stacks:
+- Mysql 8+
+- Docker
+- ProxySQL
 
 ### Steps
 - Rename .env.example to .env
@@ -76,20 +84,20 @@ pv all_db.sql | docker exec -i [container_id] mysql -uroot --password=[your_pass
 docker-compose -f docker-compose.single.yaml up -d --force-recreate
 ```
 
-## Open URL PhpMyAdmin:
-http://192.168.1.1:8000 [your_ip_addres]:[port]
+## Access :
+- Login Using Credential Root in PMA
 ```
-> Login Using Credential Root
-user: root
-pass: R1Wn11UBFlCX
+Link : http://192.168.1.1:8000 [your_ip_addres]:[port]
+user : root
+pass : R1Wn11UBFlCX
+```
 
-> Login Using Credential Master
-user: usr_master
-pass: U18E36GEMNQGg
-
-> Login Using Credential Slave
-user: usr_read
-pass: U2Fv93xF9GgcD
+- Login Using Credential for Super User Proxysql 
+> Recomended this cred to connect to your app or using mysql-client like navicat for load balance connection
+```
+user : super_usr
+pass : QdlZtA75V8jj
+port : 6033
 ```
 
 ## How to contribute:
