@@ -34,17 +34,23 @@ ProxySQL is an open-source high-performance database proxy. It acts as an interm
 
 
 ## Get started with master-master:
-
-```bash
-$ chmod +x mysql-deployment.master-master
-$ ./mysql-deployment.master-master.sh
+- Set permission if using linux
+```
+chmod +x mysql-deployment.master-master.sh
+```
+- Run script
+```
+./mysql-deployment.master-master.sh
 ```
 
 ## Get started with master-slave:
-
-```bash
-$ chmod +x mysql-deployment.master-slave
-$ ./mysql-deployment.master-slave.sh
+- Set permission if using linux
+```
+chmod +x mysql-deployment.master-slave.sh
+```
+- Run script
+```
+./mysql-deployment.master-slave.sh
 ```
 
 ## Re-sync slave if down or crash:
