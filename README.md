@@ -54,22 +54,31 @@ chmod +x mysql-deployment.master-slave.sh
 ```
 
 ## Re-sync slave if down or crash:
+- install pipeviewer for first time only
 ```
-# install pipeviewer for first time only
 apt install pv
-
-# backup single db
+```
+### Single database
+- backup single db
+```
 docker exec [container_id] mysqldump -uroot --password=[your_password] --triggers --routines --skip-lock-tables --single-transaction [db_name] | pv -W > [db_name] .sql
-# import single db
+```
+- import single db
+```
 pv [db_name].sql | docker exec -i [container_id] mysql -uroot --password=[your_password] [db_name]
+```
 
-# backup all dbs
+### All databases
+- backup all dbs
+```
 docker exec [container_id] mysqldump -uroot --password=[your_password] --triggers --routines --skip-lock-tables --single-transaction --all-databases | pv -W > all_db.sql
-# import all dbs
+```
+- import all dbs
+```
 pv all_db.sql | docker exec -i [container_id] mysql -uroot --password=[your_password]
 ```
 
-## Compose single instance
+## Running mysql with single instance
 ```
 docker-compose -f docker-compose.single.yaml up -d --force-recreate
 ```
@@ -77,7 +86,7 @@ docker-compose -f docker-compose.single.yaml up -d --force-recreate
 ## Access :
 - Login Using Credential Root in PMA
 ```
-Link : http://192.168.1.1:8000 [YOUR_IP_ADDRESS]:[PORT]
+Link : http://localhost:8000 or http://[YOUR_IP_ADDRESS]:[PORT]
 user : root
 pass : R1Wn11UBFlCX
 ```
