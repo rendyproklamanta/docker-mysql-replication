@@ -2,34 +2,34 @@ version: '3.7'
 
 services:
   mysql-master:
-    container_name: $FIRST_DB_NAME
+    container_name: $FIRST_HOST
     image: mysql:latest
     restart: unless-stopped
     volumes:
-      - '/var/lib/mysql/master:/var/lib/mysql'
-      - './hosts/server1.cnf:/etc/mysql/conf.d/mysql.cnf'
+      - ./data/master:/var/lib/mysql
+      - ./hosts/master-master/server1.cnf:/etc/mysql/conf.d/mysql.cnf
     command: bash -c "chmod 644 /etc/mysql/conf.d/mysql.cnf && docker-entrypoint.sh mysqld"
     environment:
-      TZ: "Asia/jakarta"
+      TZ: Asia/jakarta
       MYSQL_ROOT_PASSWORD: $FIRST_ROOT_PASSWORD
     ports:
-      - "3306:3306"
+      - 3306:3306
     networks:
       - db-replication
 
-  mysql-second:
-    container_name: $SECOND_DB_NAME
+  mysql-master2:
+    container_name: $SECOND_HOST
     image: mysql:latest
     restart: unless-stopped
     volumes:
-      - '/var/lib/mysql/second:/var/lib/mysql'
-      - './hosts/server2.cnf:/etc/mysql/conf.d/mysql.cnf'
+      - ./data/master2:/var/lib/mysql
+      - ./hosts/master-master/server2.cnf:/etc/mysql/conf.d/mysql.cnf
     command: bash -c "chmod 644 /etc/mysql/conf.d/mysql.cnf && docker-entrypoint.sh mysqld"
     environment:
       TZ: "Asia/jakarta"
       MYSQL_ROOT_PASSWORD: $SECOND_ROOT_PASSWORD
     ports:
-      - "3307:3307"
+      - 3307:3306
     networks:
       - db-replication
   
@@ -40,7 +40,7 @@ services:
     container_name: phpmyadmin
     restart: always
     ports:
-      - "8000:80"
+      - 8000:80
     environment:
       - TZ=Asia/Jakarta
       - PMA_HOST=mysql-master
@@ -57,7 +57,7 @@ services:
     container_name: mysql-cron-backup
     restart: unless-stopped    
     volumes:
-      - /var/lib/mysql/backup:/backup
+      - ./data/backup:/backup
     environment:
       - TZ=Asia/Jakarta
       - MYSQL_HOST=mysql-master
@@ -73,13 +73,13 @@ services:
     image: proxysql/proxysql
     depends_on:
       - mysql-master
-      - mysql-second
+      - mysql-master2
     ports:
       - 6032:6032
       - 6033:6033
     restart: unless-stopped
     volumes:
-      - ./proxysql.cnf:/etc/proxysql.cnf
+      - ./proxysql/master-master/proxysql.cnf:/etc/proxysql.cnf
     networks:
       - db-replication
 

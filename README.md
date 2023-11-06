@@ -29,38 +29,22 @@ ProxySQL is an open-source high-performance database proxy. It acts as an interm
 - ProxySQL
 
 ### Steps
-- Rename .env.example to .env
 - Edit [mysql.env](mysql.env) file variable as yours
 - Edit [mysql-deployment.sh](mysql-deployment.sh) with your custom configuration
 
-# Get started with master-slave:
 
-There are several variables which is your replication configuration, and all of them have a default value, so if you don't specify any variable it will work correctly but, it would be a good idea to chnage some of them, for instance your root password or replication user and password. To do that you can export specified below variables:
-
+## Get started with master-master:
 
 ```bash
-export REPLICATION_METHOD=master-slave
+$ chmod +x mysql-deployment.master-master
+$ ./mysql-deployment.master-master.sh
 ```
 
-
-# Get started with master-master:
-
-First of all You should set a variable to benefit from master-master replication "REPLICATION_METHOD=master-master".
+## Get started with master-slave:
 
 ```bash
-export REPLICATION_METHOD=master-master
-```
-
-## Usage:
-
-You can deploy your mysql replication by just executing these commands:
-
-```bash
-export REPLICATION_METHOD=master-master
-or 
-export REPLICATION_METHOD=master-slave
-
-./mysql-deployment.sh
+$ chmod +x mysql-deployment.master-slave
+$ ./mysql-deployment.master-slave.sh
 ```
 
 ## Re-sync slave if down or crash:
@@ -87,7 +71,7 @@ docker-compose -f docker-compose.single.yaml up -d --force-recreate
 ## Access :
 - Login Using Credential Root in PMA
 ```
-Link : http://192.168.1.1:8000 [your_ip_addres]:[port]
+Link : http://192.168.1.1:8000 [YOUR_IP_ADDRESS]:[PORT]
 user : root
 pass : R1Wn11UBFlCX
 ```
@@ -95,6 +79,7 @@ pass : R1Wn11UBFlCX
 - Login Using Credential for Super User Proxysql 
 > Recomended this cred to connect to your app or using mysql-client like navicat for load balance connection
 ```
+host : localhost or [YOUR_IP_ADDRESS]
 user : super_usr
 pass : QdlZtA75V8jj
 port : 6033

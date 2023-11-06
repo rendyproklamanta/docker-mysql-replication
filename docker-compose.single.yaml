@@ -8,13 +8,13 @@ services:
     env_file:
       - ./mysql.env
     volumes:
-      - '/var/lib/mysql/data:/var/lib/mysql'
-      - './hosts/server1.cnf:/etc/mysql/conf.d/mysql.cnf'
+      - ./data/db:/var/lib/mysql
+      - ./hosts/single.cnf:/etc/mysql/conf.d/mysql.cnf
     environment:
       - TZ=Asia/Jakarta
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     ports:
-      - "3306:3306"
+      - 3306:3306
     networks:
       - mysql
 
@@ -25,7 +25,7 @@ services:
     container_name: phpmyadmin
     restart: always
     ports:
-      - "8000:80"
+      - 8000:80
     environment:
       - TZ=Asia/Jakarta
       - PMA_HOST=mysql
@@ -44,7 +44,7 @@ services:
     env_file:
       - ./mysql.env
     volumes:
-      - /var/lib/mysql/backup:/backup
+      - ./data/backup:/backup
     environment:
       - TZ=Asia/Jakarta
       - MYSQL_HOST=mysql

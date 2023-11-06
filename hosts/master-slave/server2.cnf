@@ -5,17 +5,17 @@
 
 # These configs are mandatory, Don't change them.
 default_authentication_plugin = mysql_native_password
-server-id       = 1
-port            = 3306
+server-id       = 2
 bind-address    = 0.0.0.0
 sql-mode        = 
 binlog-format   = mixed
 log-bin         = mysql-bin
 log_bin_trust_function_creators = 1
+relay-log       = mysql-relay-bin
 
 # You can add other configs below
 max_allowed_packet      = 500M
 innodb_buffer_pool_size = 2G
-wait_timeout            = 600
-interactive_timeout     = 600
-max_connections         = 1000
+wait_timeout            = 300
+interactive_timeout     = 300
+max_connections         = 500

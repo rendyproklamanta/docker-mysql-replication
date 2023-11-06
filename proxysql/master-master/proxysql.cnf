@@ -12,7 +12,7 @@ mysql_query_rules=
     {
         rule_id=1;
         active=1;
-        match_pattern="^SELECT.*";
+        match_pattern="^SELECT.*|UPDATE.*|^INSERT.*|^DELETE.*|^REPLACE.*";
         destination_hostgroup=20;
         apply=1;
     },
@@ -48,8 +48,8 @@ mysql_servers=
         use_ssl=false;
     },
     {
-        address="mysql-second";
-        port=3307;
+        address="mysql-master2";
+        port=3306;
         hostgroup=20;
         max_connections=1000;
         use_ssl=false;
