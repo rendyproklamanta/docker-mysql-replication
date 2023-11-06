@@ -19,7 +19,7 @@ mysql_query_rules=
     {
         rule_id=2;
         active=1;
-        match_pattern="^UPDATE.*|^INSERT.*|^DELETE.*|^REPLACE.*";
+        match_pattern="^SELECT.*|UPDATE.*|^INSERT.*|^DELETE.*|^REPLACE.*";
         destination_hostgroup=10;
         apply=1;
     }
