@@ -11,35 +11,30 @@ master-slave() {
 
 	# load env file into the script's environment.
 	source mysql.env
-
-	echo
-	echo Preparing prerequisite...
-	echo
-
- 	sudo curl -L https://github.com/docker/compose/releases/download/v2.18.1/docker-compose-`uname -s`-`uname -m` -o /usr/bin/docker-compose
-    	sudo chmod +x /usr/bin/docker-compose
  
 	echo
 	echo Starting deploying...
 	echo
 
-    export FIRST_HOST=${MYSQL_FIRST_HOST:-'mysql-master'}
+	export TIMEZONE=${MYSQL_TIMEZONE:-'UTC'}
+
+   export FIRST_HOST=${MYSQL_FIRST_HOST:-'mysql-master'}
 	export SECOND_HOST=${MYSQL_SECOND_HOST:-'mysql-slave'}
 
 	export FIRST_REPL_USER=${MYSQL_FIRST_REPLICATION_USER:-'repl'}
-	export FIRST_REPL_PASSWORD=${MYSQL_FIRST_REPLICATION_PASSWORD}
+	export FIRST_REPL_PASSWORD=${MYSQL_FIRST_REPLICATION_PASSWORD:-'12345678910'}
 
-	export FIRST_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-	export SECOND_ROOT_PASSWORD=${MYSQL_ROOT_SECOND_PASSWORD}
+	export FIRST_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-'12345678910'}
+	export SECOND_ROOT_PASSWORD=${MYSQL_ROOT_SECOND_PASSWORD:-'12345678910'}
 
-	export USER_PROXY_USERNAME=${MYSQL_USER_PROXY_USERNAME}
-    export USER_PROXY_PASSWORD=${MYSQL_USER_PROXY_PASSWORD}
+	export USER_PROXY_USERNAME=${MYSQL_USER_PROXY_USERNAME:-'proxy'}
+   export USER_PROXY_PASSWORD=${MYSQL_USER_PROXY_PASSWORD:-'12345678910'}
 
-	export USER_SUPER_USERNAME=${MYSQL_USER_SUPER_USERNAME}
-    export USER_SUPER_PASSWORD=${MYSQL_USER_SUPER_PASSWORD}
+	export USER_SUPER_USERNAME=${MYSQL_USER_SUPER_USERNAME:-'super'}
+   export USER_SUPER_PASSWORD=${MYSQL_USER_SUPER_PASSWORD:-'12345678910'}
 
 	#export IP_ADDR=${DOCKER0_IP:-$(ip a show dev docker0 |grep inet|awk '{print $2}'|awk -F\/ '{print $1}'|grep -v ::)}
-    export IP_ADDR=0.0.0.0
+   export IP_ADDR=0.0.0.0
 
 	docker compose -f docker-compose.master-slave.yaml up -d --force-recreate
 
@@ -52,7 +47,9 @@ master-slave() {
 	# Create user on master database.
 	docker exec $FIRST_HOST \
 			mysql -u root --password=$FIRST_ROOT_PASSWORD \
-			--execute="CREATE USER IF NOT EXISTS '$FIRST_REPL_USER'@'%' identified by '$FIRST_REPL_PASSWORD';\
+			--execute="SET GLOBAL time_zone = '$TIMEZONE';\
+
+			CREATE USER IF NOT EXISTS '$FIRST_REPL_USER'@'%' identified by '$FIRST_REPL_PASSWORD';\
 			grant replication slave on *.* to '$FIRST_REPL_USER'@'%';\
                        
 			CREATE USER IF NOT EXISTS '$USER_PROXY_USERNAME'@'%' identified by '$USER_PROXY_PASSWORD';\
@@ -60,7 +57,7 @@ master-slave() {
 
 			CREATE USER IF NOT EXISTS '$MYSQL_USER_SUPER_USERNAME'@'%' identified by '$MYSQL_USER_SUPER_PASSWORD';\
 			GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_USER_SUPER_USERNAME'@'%' WITH GRANT OPTION;\
-
+			
 			FLUSH PRIVILEGES;"
 
 	# Get the log position and name.
@@ -71,7 +68,9 @@ master-slave() {
 	# Connect slave to master.
 	docker exec $SECOND_HOST \
 			mysql -u root --password=$SECOND_ROOT_PASSWORD \
-			--execute="stop slave;\
+			--execute="SET GLOBAL time_zone = '$TIMEZONE';\
+			
+			stop slave;\
 			reset slave;\
 
 			CREATE USER IF NOT EXISTS '$USER_PROXY_USERNAME'@'%' identified by '$USER_PROXY_PASSWORD';\
@@ -84,6 +83,7 @@ master-slave() {
 
 			CHANGE MASTER TO MASTER_HOST='$FIRST_HOST', MASTER_USER='$FIRST_REPL_USER', \
 			MASTER_PASSWORD='$FIRST_REPL_PASSWORD', MASTER_LOG_FILE='$log', MASTER_LOG_POS=$position;\
+
 			start slave;\
 			SHOW SLAVE STATUS\G;"
 
