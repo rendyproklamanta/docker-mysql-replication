@@ -36,16 +36,16 @@ master-slave() {
 	#export IP_ADDR=${DOCKER0_IP:-$(ip a show dev docker0 |grep inet|awk '{print $2}'|awk -F\/ '{print $1}'|grep -v ::)}
    export IP_ADDR=0.0.0.0
 
-	docker compose -f docker-compose.master-slave.yaml up -d --force-recreate
+	docker stack deploy --compose-file docker-compose.master-slave.yaml mysql
 
 	echo
-	echo waiting 30s for containers to be up and running...
+	echo waiting 60s for containers to be up and running...
 	echo Implementing mysql master slave replication...
 	sleep 60
 	echo
 
 	# Create user on master database.
-	docker exec $FIRST_HOST \
+	docker exec $(docker ps -q -f name=$FIRST_HOST) \
 			mysql -u root --password=$FIRST_ROOT_PASSWORD \
 			--execute="SET GLOBAL time_zone = '$TIMEZONE';\
 
@@ -61,12 +61,12 @@ master-slave() {
 			FLUSH PRIVILEGES;"
 
 	# Get the log position and name.
-	result=$(docker exec $FIRST_HOST mysql -u root --password=$FIRST_ROOT_PASSWORD --execute="show master status;")
+	result=$(docker exec $(docker ps -q -f name=$FIRST_HOST) mysql -u root --password=$FIRST_ROOT_PASSWORD --execute="show master status;")
 	log=$(echo $result|awk '{print $6}')
 	position=$(echo $result|awk '{print $7}')
 
 	# Connect slave to master.
-	docker exec $SECOND_HOST \
+	docker exec $(docker ps -q -f name=$SECOND_HOST) \
 			mysql -u root --password=$SECOND_ROOT_PASSWORD \
 			--execute="SET GLOBAL time_zone = '$TIMEZONE';\
 			

@@ -16,7 +16,7 @@ services:
     ports:
       - 3306:3306
     networks:
-      - mysql
+      - mysql-network
 
   pma:
     depends_on:
@@ -33,7 +33,7 @@ services:
       - MEMORY_LIMIT=500M
       - MAX_EXECUTION_TIME=1000
     networks:
-      - mysql
+      - mysql-network
 
   mysql-cron-backup:
     depends_on:
@@ -54,9 +54,8 @@ services:
       - INIT_BACKUP=0
       - CRON_TIME=0 */6 * * *
     networks:
-      - mysql
+      - mysql-network
       
 networks:
-  mysql:
-    name: mysql
-    driver: bridge
+  mysql-network:
+    external: true

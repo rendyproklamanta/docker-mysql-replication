@@ -32,25 +32,38 @@ ProxySQL is an open-source high-performance database proxy. It acts as an interm
 - Edit [mysql.env](mysql.env) file variable as yours
 - Edit [mysql-deployment.sh](mysql-deployment.sh) with your custom configuration
 
+- Init docker swarm
+```
+docker swarm init
+```
 
-## Get started with master-master:
+- Create network
+```
+docker network create --driver overlay mysql-network
+```
+
+- Change deployment method (master-master / master-slave):
+```
+nano start.sh
+```
+
 - Set permission if using linux
 ```
-chmod +x mysql-deployment.master-master.sh
+chmod +x start.sh
 ```
 - Run script
 ```
-./mysql-deployment.master-master.sh
+./start.sh
 ```
 
-## Get started with master-slave:
-- Set permission if using linux
+- Set auto start and re-sync on reboot :
 ```
-chmod +x mysql-deployment.master-slave.sh
-```
-- Run script
-```
-./mysql-deployment.master-slave.sh
+> Enable startup service :
+mv mysql-stack.service /etc/systemd/system/mysql-stack.service
+sudo systemctl enable mysql-stack.service
+
+> Check status after reboot :
+sudo journalctl -u mysql-stack.service
 ```
 
 ## Re-sync slave if down or crash:

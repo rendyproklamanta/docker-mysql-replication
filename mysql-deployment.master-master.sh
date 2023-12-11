@@ -41,7 +41,7 @@ master-master() {
     #export IP_ADDR=${DOCKER0_IP:-$(ip a show dev docker0 |grep inet|awk '{print $2}'|awk -F\/ '{print $1}'|grep -v ::)}
     export IP_ADDR=0.0.0.0
 
-    docker compose -f docker-compose.master-master.yaml up -d --force-recreate
+	docker stack deploy --compose-file docker-compose.master-master.yaml mysql
 
     echo
     echo waiting 30s for containers to be up and running...
@@ -50,7 +50,7 @@ master-master() {
     echo
 
     # Create user database.
-    docker exec $FIRST_HOST \
+    docker exec $(docker ps -q -f name=$FIRST_HOST) \
         mysql -u root --password=$FIRST_ROOT_PASSWORD \
         --execute="CREATE USER IF NOT EXISTS '$FIRST_REPL_USER'@'%' identified by '$FIRST_REPL_PASSWORD';\
         grant replication slave on *.* to '$FIRST_REPL_USER'@'%';\
@@ -63,7 +63,7 @@ master-master() {
 
         flush privileges;"
 
-    docker exec $SECOND_HOST \
+    docker exec $(docker ps -q -f name=$SECOND_HOST) \
         mysql -u root --password=$SECOND_ROOT_PASSWORD \
         --execute="CREATE USER IF NOT EXISTS '$SECOND_REPL_USER'@'%' identified by '$SECOND_REPL_PASSWORD';\
         grant replication slave on *.* to '$SECOND_REPL_USER'@'%';\
@@ -78,16 +78,16 @@ master-master() {
 
 
     # Get the log position and name.
-    master1_result=$(docker exec $FIRST_HOST mysql -u root --password=$FIRST_ROOT_PASSWORD --execute="show master status;")
+    master1_result=$(docker exec $(docker ps -q -f name=$FIRST_HOST) mysql -u root --password=$FIRST_ROOT_PASSWORD --execute="show master status;")
     master1_log=$(echo $master1_result|awk '{print $6}')
     master1_position=$(echo $master1_result|awk '{print $7}')
 
-    master2_result=$(docker exec $SECOND_HOST mysql -u root --password=$SECOND_ROOT_PASSWORD --execute="show master status;")
+    master2_result=$(docker exec $(docker ps -q -f name=$SECOND_HOST) mysql -u root --password=$SECOND_ROOT_PASSWORD --execute="show master status;")
     master2_log=$(echo $master2_result|awk '{print $6}')
     master2_position=$(echo $master2_result|awk '{print $7}')
 
     # Setup master-master
-    docker exec $SECOND_HOST \
+    docker exec $(docker ps -q -f name=$SECOND_HOST) \
         mysql -u root --password=$SECOND_ROOT_PASSWORD \
         --execute="SET GLOBAL time_zone = '$TIMEZONE';\
 
@@ -100,7 +100,7 @@ master-master() {
         start slave;\
         SHOW SLAVE STATUS\G;"
 
-    docker exec $FIRST_HOST \
+    docker exec $(docker ps -q -f name=$FIRST_HOST) \
         mysql -u root --password=$FIRST_ROOT_PASSWORD \
         --execute="SET GLOBAL time_zone = '$TIMEZONE';\
         
@@ -117,7 +117,7 @@ master-master() {
 	echo
 	echo ###################	SECOND status
 
-    docker exec $SECOND_HOST \
+    docker exec $(docker ps -q -f name=$SECOND_HOST) \
         mysql -u root --password=$SECOND_ROOT_PASSWORD \
         --execute="SHOW SLAVE STATUS\G;"
 
@@ -125,7 +125,7 @@ master-master() {
 	echo
 	echo ###################	FIRST status
 
-    docker exec $FIRST_HOST \
+    docker exec $(docker ps -q -f name=$FIRST_HOST) \
         mysql -u root --password=$FIRST_ROOT_PASSWORD \
         --execute="SHOW SLAVE STATUS\G;"
 

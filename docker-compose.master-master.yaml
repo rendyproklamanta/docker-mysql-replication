@@ -15,7 +15,7 @@ services:
     ports:
       - 3306:3306
     networks:
-      - db-replication
+      - mysql-network
 
   mysql-master2:
     container_name: $SECOND_HOST
@@ -31,7 +31,7 @@ services:
     ports:
       - 3307:3306
     networks:
-      - db-replication
+      - mysql-network
   
   pma:
     depends_on:
@@ -48,7 +48,7 @@ services:
       - MEMORY_LIMIT=500M
       - MAX_EXECUTION_TIME=1000
     networks:
-      - db-replication
+      - mysql-network
       
   mysql-cron-backup:
     depends_on:
@@ -67,7 +67,7 @@ services:
       - INIT_BACKUP=0
       - CRON_TIME=0 */6 * * *
     networks:
-      - db-replication
+      - mysql-network
 
   proxysql:
     image: proxysql/proxysql
@@ -81,9 +81,8 @@ services:
     volumes:
       - ./proxysql/master-master/proxysql.cnf:/etc/proxysql.cnf
     networks:
-      - db-replication
+      - mysql-network
 
 networks:
-  db-replication:
-    name: db-replication
-    driver: bridge
+  mysql-network:
+    external: true
