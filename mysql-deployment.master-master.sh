@@ -20,8 +20,8 @@ master-master() {
 
 	export TIMEZONE=${MYSQL_TIMEZONE:-'UTC'}
 
-    export FIRST_HOST=${MYSQL_FIRST_HOST:-'mysql-master'}
-    export SECOND_HOST=${MYSQL_SECOND_HOST:-'mysql-master2'}
+    export FIRST_HOST=mysql-master
+    export SECOND_HOST=mysql-master2
 
     export FIRST_REPL_USER=${MYSQL_FIRST_REPLICATION_USER:-'repl-master1'}
     export SECOND_REPL_USER=${MYSQL_SECOND_REPLICATION_USER:-'repl-master2'}

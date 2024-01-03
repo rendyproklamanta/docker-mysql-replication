@@ -18,8 +18,8 @@ master-slave() {
 
 	export TIMEZONE=${MYSQL_TIMEZONE:-'UTC'}
 
-   export FIRST_HOST=${MYSQL_FIRST_HOST:-'mysql-master'}
-	export SECOND_HOST=${MYSQL_SECOND_HOST:-'mysql-slave'}
+   export FIRST_HOST=mysql-master
+	export SECOND_HOST=mysql-slave
 
 	export FIRST_REPL_USER=${MYSQL_FIRST_REPLICATION_USER:-'repl'}
 	export FIRST_REPL_PASSWORD=${MYSQL_FIRST_REPLICATION_PASSWORD:-'12345678910'}
