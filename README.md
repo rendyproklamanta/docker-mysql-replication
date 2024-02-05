@@ -37,20 +37,31 @@ ProxySQL is an open-source high-performance database proxy. It acts as an interm
 docker swarm init
 ```
 
+- Add port firewall
+```
+ufw allow 3306
+ufw allow 3307
+```
+
 - Create network
 ```
 docker network create --driver overlay mysql-network
 ```
 
-- ### create dir
+- create dir
 ```
 mkdir -p /var/lib/mysql
 ```
 
-- ### goto dir and clone
+- goto dir and clone
 ```
 cd /var/lib/mysql
 git clone https://github.com/rendyproklamanta/docker-mysql-replication.git .
+```
+
+- Change enviroment variable like passwords
+```
+nano mysql.env
 ```
 
 - Change deployment method (master-master / master-slave):
