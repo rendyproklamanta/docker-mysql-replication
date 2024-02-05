@@ -1,9 +1,8 @@
 #!/bin/sh
 
-mkdir -p /var/lib/mysql/data/master
-mkdir -p /var/lib/mysql/data/slave
-
 cd /var/lib/mysql
+mkdir -p data/master
+mkdir -p data/slave
 
 chmod +x remove.sh
 ./remove.sh
