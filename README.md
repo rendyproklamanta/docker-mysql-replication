@@ -42,6 +42,17 @@ docker swarm init
 docker network create --driver overlay mysql-network
 ```
 
+- ### create dir
+```
+mkdir -p /var/lib/mysql
+```
+
+- ### goto dir and clone
+```
+cd /var/lib/mysql
+git clone https://github.com/rendyproklamanta/docker-mysql-replication.git .
+```
+
 - Change deployment method (master-master / master-slave):
 ```
 nano start.sh
