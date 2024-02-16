@@ -62,7 +62,7 @@ git clone https://github.com/rendyproklamanta/docker-mysql-replication.git .
 
 - Change enviroment variable like passwords
 ```
-nano proxysql/master-slave/proxysql.cnf
+nano mysql.env
 ```
 
 - Change mysql-master password in proxysql.cnf and make sure it's same as mysql.env
