@@ -41,6 +41,7 @@ docker swarm init
 ```
 ufw allow 3306
 ufw allow 3307
+ufw allow 6033
 ```
 
 - Create network
