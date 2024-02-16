@@ -5,6 +5,7 @@ mkdir -p data/master
 mkdir -p data/slave
 mkdir -p data/backup
 
+chmod -R 777 data
 chmod +x remove.sh
 ./remove.sh
 
