@@ -1,13 +1,10 @@
 #!/bin/sh
 
-cd /var/lib/mysql
-mkdir -p data/master
-mkdir -p data/slave
-mkdir -p data/backup
+cd /var/lib/mysql/cmd
 
-chmod -R 777 data
 chmod +x remove.sh
 ./remove.sh
 
-chmod +x mysql-deployment.master-slave.sh
-./mysql-deployment.master-slave.sh
+# Change master-slave or master-master
+chmod +x start.master-slave.sh
+./start.master-slave.sh

@@ -1,18 +1,9 @@
 #!/bin/bash
-# written by Hosein Yousefi <yousefi.hosein.o@gmail.com>
-# GITHUB https://github.com/hosein-yousefii
-
-# Automated script to replicate 2 instances of Mysql
-# Default method is master-slave You are able to change
-# the method by specifying it on the command line or
-# with REPLICATION_METHOD variable.
-# FORINSTANCE:
-# export REPLICATION_METHOD=master-master
 
 master-master() {
 
     # load env file into the script's environment.
-    source mysql.env
+    source ./mysql.env
     
     echo
     echo starting deploying...
@@ -41,6 +32,7 @@ master-master() {
     #export IP_ADDR=${DOCKER0_IP:-$(ip a show dev docker0 |grep inet|awk '{print $2}'|awk -F\/ '{print $1}'|grep -v ::)}
     export IP_ADDR=0.0.0.0
 
+    cd /var/lib/mysql
 	docker stack deploy --compose-file docker-compose.master-master.yaml mysql
 
     echo

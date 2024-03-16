@@ -1,6 +1,3 @@
-# mysql automated replication by Hosein Yousefi <yousefi.hosein.o@gmail.com>
-# GITHUB: https://github.com/hosein-yousefii
-
 [mysqld]
 
 # These configs are mandatory, Don't change them.

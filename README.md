@@ -41,7 +41,10 @@ docker swarm init
 ```
 ufw allow 3306
 ufw allow 3307
+ufw allow 3006
+ufw allow 3007
 ufw allow 6033
+ufw allow 6032
 ```
 
 - Create network
@@ -60,14 +63,17 @@ cd /var/lib/mysql
 git clone https://github.com/rendyproklamanta/docker-mysql-replication.git .
 ```
 
-- Change enviroment variable like passwords, etc..
+- Change enviroment variable like passwords, except proxy and super_usr password. Open directory *cmd*
 ```
+cd /var/lib/mysql/cmd
 nano mysql.env
 ```
 
-- Change proxy_monitor & super_usr password in proxysql.cnf. make sure it's same as mysql.env
+- Change proxy_monitor & super_usr password in proxysql.cnf by replacing tool
 ```
-nano proxysql/master-slave/proxysql.cnf
+cd /var/lib/mysql
+find -type f -exec sed -i 's/PROXY_PASSWORD/YOUR_PASSWORD/g' {} +
+find -type f -exec sed -i 's/SUPER_PASSWORD/YOUR_PASSWORD/g' {} +
 ```
 
 - Change deployment method (master-master / master-slave):
@@ -125,19 +131,18 @@ docker-compose -f docker-compose.single.yaml up -d --force-recreate
 ```
 
 ## Access :
-- Login Using Credential Root in PMA
+- Access database using PMA
 ```
 Link : http://localhost:8000 or http://[YOUR_IP_ADDRESS]:[PORT]
-user : root
-pass : YOUR_PASSWORD
+user : super_usr
+pass : SUPER_PASSWORD
 ```
 
-- Login Using Credential for Super User Proxysql 
-> Recomended this cred to connect to your app or using mysql-client like navicat for load balance connection
+- Access database using remote app like navicat, etc..
 ```
 host : localhost or [YOUR_IP_ADDRESS]
 user : super_usr
-pass : YOUR_PASSWORD
+pass : SUPER_PASSWORD
 port : 6033
 ```
 

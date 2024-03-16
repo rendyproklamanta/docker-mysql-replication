@@ -1,16 +1,9 @@
 #!/bin/bash
-# written by Hosein Yousefi <yousefi.hosein.o@gmail.com>
-# GITHUB https://github.com/hosein-yousefii
-
-# Automated script to replicate 2 instances of Mysql
-# with REPLICATION_METHOD variable.
-# FORINSTANCE:
-# export REPLICATION_METHOD=master-slave
 
 master-slave() {
 
 	# load env file into the script's environment.
-	source mysql.env
+	source ./mysql.env
  
 	echo
 	echo Starting deploying...
@@ -36,6 +29,7 @@ master-slave() {
 	#export IP_ADDR=${DOCKER0_IP:-$(ip a show dev docker0 |grep inet|awk '{print $2}'|awk -F\/ '{print $1}'|grep -v ::)}
    export IP_ADDR=0.0.0.0
 
+	cd /var/lib/mysql
 	docker stack deploy --compose-file docker-compose.master-slave.yaml mysql
 
 	echo
@@ -77,7 +71,7 @@ master-slave() {
 			GRANT ALL PRIVILEGES ON *.* TO '$USER_PROXY_USERNAME'@'%';\
 
 			CREATE USER IF NOT EXISTS '$MYSQL_USER_SUPER_USERNAME'@'%' identified by '$MYSQL_USER_SUPER_PASSWORD';\
-			GRANT SELECT ON *.* TO '$MYSQL_USER_SUPER_USERNAME'@'%' WITH GRANT OPTION;\
+			GRANT SELECT ON *.* TO '$MYSQL_USER_SUPER_USERNAME'@'%';\
 
 			FLUSH PRIVILEGES;\
 

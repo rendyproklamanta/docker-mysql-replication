@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+
+  proxysql:
+    image: proxysql/proxysql
+    ports:
+      - 6032:6032
+      - 6033:6033
+    volumes:
+      - ./proxysql.cnf:/etc/proxysql.cnf
+    networks:
+      - mysql-network
+
+  pma:
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - proxysql
+    ports:
+      - 8000:80
+    environment:
+      - TZ=Asia/Jakarta
+      - PMA_HOST=proxysql
+      - PMA_PORT=6033
+      - UPLOAD_LIMIT=2G
+      - MEMORY_LIMIT=500M
+      - MAX_EXECUTION_TIME=1000
+    networks:
+      - mysql-network
+
+networks:
+  mysql-network:
+    external: true
