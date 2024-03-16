@@ -13,7 +13,7 @@ services:
       TZ: Asia/jakarta
       MYSQL_ROOT_PASSWORD: $FIRST_ROOT_PASSWORD
     ports:
-      - 3306:3306
+      - 3006:3306
     networks:
       - mysql-network
 
@@ -29,21 +29,22 @@ services:
       TZ: "Asia/jakarta"
       MYSQL_ROOT_PASSWORD: $SECOND_ROOT_PASSWORD
     ports:
-      - 3307:3306
+      - 3007:3306
     networks:
       - mysql-network
   
   pma:
-    depends_on:
-      - mysql-master
     image: phpmyadmin/phpmyadmin
+    depends_on:
+      - proxysql
     container_name: phpmyadmin
     restart: always
     ports:
       - 8000:80
     environment:
       - TZ=Asia/Jakarta
-      - PMA_HOST=mysql-master
+      - PMA_HOST=proxysql
+      - PMA_PORT=6033
       - UPLOAD_LIMIT=2G
       - MEMORY_LIMIT=500M
       - MAX_EXECUTION_TIME=1000
