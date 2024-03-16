@@ -60,12 +60,12 @@ cd /var/lib/mysql
 git clone https://github.com/rendyproklamanta/docker-mysql-replication.git .
 ```
 
-- Change enviroment variable like passwords
+- Change enviroment variable like passwords, etc..
 ```
 nano mysql.env
 ```
 
-- Change mysql-master password in proxysql.cnf and make sure it's same as mysql.env
+- Change proxy_monitor & super_usr password in proxysql.cnf. make sure it's same as mysql.env
 ```
 nano proxysql/master-slave/proxysql.cnf
 ```
@@ -87,7 +87,7 @@ chmod +x start.sh
 - Set auto start and re-sync on reboot :
 ```
 > Enable startup service :
-mv mysql-stack.service /etc/systemd/system/mysql-stack.service
+cp mysql-stack.service /etc/systemd/system/mysql-stack.service
 sudo systemctl enable mysql-stack.service
 
 > Check status after reboot :
@@ -129,7 +129,7 @@ docker-compose -f docker-compose.single.yaml up -d --force-recreate
 ```
 Link : http://localhost:8000 or http://[YOUR_IP_ADDRESS]:[PORT]
 user : root
-pass : R1Wn11UBFlCX
+pass : YOUR_PASSWORD
 ```
 
 - Login Using Credential for Super User Proxysql 
@@ -137,7 +137,7 @@ pass : R1Wn11UBFlCX
 ```
 host : localhost or [YOUR_IP_ADDRESS]
 user : super_usr
-pass : QdlZtA75V8jj
+pass : YOUR_PASSWORD
 port : 6033
 ```
 

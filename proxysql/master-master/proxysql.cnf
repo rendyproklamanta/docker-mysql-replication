@@ -28,13 +28,13 @@ mysql_query_rules=
 mysql_variables=
 {
     monitor_username="proxy_monitor"
-    monitor_password="QdlZtA75V8jj"
+    monitor_password="YOUR_PASSWORD"
 }
 
 # MySQL users
 mysql_users =
 (
-    { username="super_usr", password="QdlZtA75V8jj", default_hostgroup=10, max_connections=1000 },
+    { username="super_usr", password="YOUR_PASSWORD", default_hostgroup=10, max_connections=1000 },
 )
 
 # MySQL Servers
