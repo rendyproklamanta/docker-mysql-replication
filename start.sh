@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd /var/lib/mysql/cmd
+cd /var/lib/mysql/scripts
 
 chmod +x remove.sh
 ./remove.sh

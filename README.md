@@ -65,7 +65,7 @@ git clone https://github.com/rendyproklamanta/docker-mysql-replication.git .
 
 - Change enviroment variable like passwords, except proxy and super_usr password. Open directory *cmd*
 ```
-cd /var/lib/mysql/cmd
+cd /var/lib/mysql/scripts
 nano mysql.env
 ```
 

@@ -7,7 +7,7 @@ mkdir -p data/backup
 
 chmod -R 777 data
 
-cd /var/lib/mysql/cmd
+cd /var/lib/mysql/scripts
 chmod +x deploy.master-master.sh
 ./deploy.master-master.sh
 
