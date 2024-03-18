@@ -32,6 +32,5 @@ mysql_users =
 )
 
 mysql_query_rules = (
-    { rule_id=1, active=1, username="super_usr", match_pattern="^(SELECT|SET).*", destination_hostgroup=20, apply=1 },
-    { rule_id=2, active=1, username="super_usr", match_pattern="^(?!SELECT\s|SET\s).*$", destination_hostgroup=10, apply=1 },
+    { rule_id=1, active=1, username="super_usr", match_digest="insert|update|delete|replace|load data|set|alter|create|drop|grant|revoke", destination_hostgroup=10 },
 )
