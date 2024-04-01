@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+
+  pma:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 8000:80
+    environment:
+      - TZ=Asia/Jakarta
+      - PMA_HOST=proxysql
+      - PMA_PORT=6033
+      - UPLOAD_LIMIT=2G
+      - MEMORY_LIMIT=500M
+      - MAX_EXECUTION_TIME=1000
+    networks:
+      - mysql-network
+
+networks:
+  mysql-network:
+    external: true
