@@ -6,7 +6,7 @@ services:
     image: mysql:latest
     volumes:
       - ./data/master:/var/lib/mysql
-      - ./hosts/master-slave/master.cnf:/etc/mysql/conf.d/mysql.cnf
+      - ./conf/master.cnf:/etc/mysql/conf.d/mysql.cnf
     command: bash -c "chmod 644 /etc/mysql/conf.d/mysql.cnf && docker-entrypoint.sh mysqld"
     environment:
       TZ: "Asia/jakarta"
