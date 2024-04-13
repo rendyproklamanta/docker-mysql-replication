@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # load env file into the script's environment.
-source env/user.sh
+source env/master.sh
 source env/slave2.sh
+source env/user.sh
 
 echo
 echo Starting deploying slave2...
@@ -35,7 +36,7 @@ docker exec $(docker ps -q -f name=$HOST_SLAVE2) \
 
 		CREATE USER IF NOT EXISTS '$USER_SUPER_USERNAME'@'%' identified by '$USER_SUPER_PASSWORD';\
 		GRANT SELECT ON *.* TO '$USER_SUPER_USERNAME'@'%';\
-		
+
 		FLUSH PRIVILEGES;\
 
 		CHANGE MASTER TO MASTER_HOST='$HOST_MASTER', MASTER_USER='$REPL_USERNAME', \

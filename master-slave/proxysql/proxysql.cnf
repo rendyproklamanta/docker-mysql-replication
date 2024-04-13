@@ -19,7 +19,6 @@ mysql_replication_hostgroups=
 {
     writer_hostgroup=1
     reader_hostgroup=2
-    active = 1
 }
 
 mysql_servers = (

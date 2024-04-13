@@ -24,7 +24,7 @@ services:
       - ./data/backup:/backup
     environment:
       - TZ=Asia/Jakarta
-      - MYSQL_HOST=proxysql
+      - MYSQL_HOST=mysql-master
       - MYSQL_USER=${USER_SUPER_USERNAME}
       - MYSQL_PASS=${USER_SUPER_PASSWORD}
       - MAX_BACKUPS=4

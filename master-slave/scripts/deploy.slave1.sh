@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # load env file into the script's environment.
-source env/user.sh
+source env/master.sh
 source env/slave1.sh
+source env/user.sh
 
 echo
 echo Starting deploying slave1...
