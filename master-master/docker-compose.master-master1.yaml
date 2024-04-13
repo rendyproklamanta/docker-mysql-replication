@@ -1,38 +1,28 @@
-version: '3.9'
+version: '3.7'
 
 services:
   mysql-master:
+    container_name: $HOST_MASTER
     image: mysql:latest
+    restart: unless-stopped
     volumes:
-      - ./data/master:/var/lib/mysql
-      - ./hosts/master-slave/server1.cnf:/etc/mysql/conf.d/mysql.cnf
+      - ./data/master1:/var/lib/mysql
+      - ./hosts/master-master/server1.cnf:/etc/mysql/conf.d/mysql.cnf
     command: bash -c "chmod 644 /etc/mysql/conf.d/mysql.cnf && docker-entrypoint.sh mysqld"
     environment:
       TZ: Asia/jakarta
-      MYSQL_ROOT_PASSWORD: $FIRST_ROOT_PASSWORD
+      MASTER_ROOT_PASSWORD: $FIRST_ROOT_PASSWORD
     ports:
       - 3006:3306
     networks:
       - mysql-network
-
-  mysql-slave:
-    image: mysql:latest
-    volumes:
-      - ./data/slave:/var/lib/mysql
-      - ./hosts/master-slave/server2.cnf:/etc/mysql/conf.d/mysql.cnf
-    command: bash -c "chmod 644 /etc/mysql/conf.d/mysql.cnf && docker-entrypoint.sh mysqld"
-    environment:
-      TZ: "Asia/jakarta"
-      MYSQL_ROOT_PASSWORD: $SECOND_ROOT_PASSWORD
-    ports:
-      - 3007:3306
-    networks:
-      - mysql-network
-
+      
   mysql-cron-backup:
-    image: fradelg/mysql-cron-backup
     depends_on:
       - mysql-master
+    image: fradelg/mysql-cron-backup
+    container_name: mysql-cron-backup
+    restart: unless-stopped    
     volumes:
       - ./data/backup:/backup
     environment:

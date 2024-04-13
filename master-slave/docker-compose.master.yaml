@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+
+  mysql-master:
+    image: mysql:latest
+    volumes:
+      - ./data/master:/var/lib/mysql
+      - ./hosts/master-slave/master.cnf:/etc/mysql/conf.d/mysql.cnf
+    command: bash -c "chmod 644 /etc/mysql/conf.d/mysql.cnf && docker-entrypoint.sh mysqld"
+    environment:
+      TZ: "Asia/jakarta"
+      MYSQL_ROOT_PASSWORD: $MASTER_ROOT_PASSWORD
+    ports:
+      - 3300:3306
+    networks:
+      - mysql-network
+
+networks:
+  mysql-network:
+    external: true

@@ -1,14 +1,15 @@
 #!/bin/sh
 
-cd /var/lib/mysql/scripts
+# change master-master / master-slave
+cd master-slave/scripts
 
-chmod +x remove.sh
-./remove.sh
+# Remove mysql services
+docker stack rm mysql
 
-# Change master-slave or master-master
-chmod +x start.master-slave.sh
-./start.master-slave.sh
+chmod +x init.sh
+./init.sh
 
-# Install PMA
-cd /var/lib/mysql
+# Install compose
+cd ../../
 docker stack deploy --compose-file docker-compose.pma.yaml mysql
+docker stack deploy --compose-file docker-compose.cron-backup.yaml mysql

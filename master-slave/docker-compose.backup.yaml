@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+
+  mysql-cron-backup:
+    image: fradelg/mysql-cron-backup
+    volumes:
+      - ./data/backup:/backup
+    environment:
+      - TZ=Asia/Jakarta
+      - MYSQL_HOST=proxysql
+      - MYSQL_USER=${USER_SUPER_USERNAME}
+      - MYSQL_PASS=${USER_SUPER_PASSWORD}
+      - MAX_BACKUPS=4
+      - INIT_BACKUP=0
+      - CRON_TIME=0 */6 * * *
+    networks:
+      - mysql-network
+
+networks:
+  mysql-network:
+    external: true

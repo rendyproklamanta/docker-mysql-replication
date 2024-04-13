@@ -1,4 +1,5 @@
 mysql -uadmin -padmin -P 6032
+SELECT * from mysql_replication_hostgroups;
 SELECT * FROM mysql_servers;
 SELECT * FROM mysql_users;
 SELECT rule_id, match_digest, match_pattern, replace_pattern, cache_ttl, apply FROM mysql_query_rules ORDER BY rule_id;
