@@ -3,11 +3,12 @@
 # These configs are mandatory, Don't change except server-id / bind-address / port.
 default_authentication_plugin    = mysql_native_password
 log_bin_trust_function_creators  = 1
-server-id         = 1
-bind-address      = 0.0.0.0
 sql-mode          = 
-relay_log         = mysql-relay-bin
-gtid_strict_mode  = 1
+server-id         = 2
+bind-address      = 0.0.0.0
+binlog-format     = mixed
+log-bin           = mysql-bin
+relay-log         = mysql-relay-bin
 read_only         = 1
 
 # You can add other configs below

@@ -100,11 +100,18 @@ sudo systemctl enable mysql-stack.service
 sudo journalctl -u mysql-stack.service
 ```
 
+## Reload proxysql config:
+```
+cd master/slave/proxysql
+docker service rm mysql_proxysql && docker stack deploy --compose-file docker-compose.yaml mysql
+```
+
 ## Re-sync slave if down or crash:
 - install pipeviewer for first time only
 ```
 apt install pv
 ```
+
 ### Single database
 - backup single db
 ```
