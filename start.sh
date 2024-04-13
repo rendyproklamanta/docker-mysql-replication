@@ -6,10 +6,10 @@ cd master-slave/scripts
 # Remove mysql services
 docker stack rm mysql
 
+# Run init.sh
 chmod +x init.sh
 ./init.sh
 
-# Install compose
+# Install optional
 cd ../../
 docker stack deploy --compose-file docker-compose.pma.yaml mysql
-docker stack deploy --compose-file docker-compose.cron-backup.yaml mysql

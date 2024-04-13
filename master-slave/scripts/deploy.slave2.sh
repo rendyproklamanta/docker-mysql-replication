@@ -4,13 +4,13 @@
 source ./mysql.env
 
 echo
-echo Starting deploying slave1...
+echo Starting deploying SLAVE2...
 echo
 
 cd ../
-docker stack deploy --compose-file docker-compose.slave1.yaml mysql
+docker stack deploy --compose-file docker-compose.SLAVE2.yaml mysql
 
-echo Host : $HOST_SLAVE1
+echo Host : $HOST_SLAVE2
 echo waiting 10s for master to be up and running...
 echo Implementing slave replication...
 sleep 10
@@ -22,8 +22,8 @@ log=$(echo $result|awk '{print $6}')
 position=$(echo $result|awk '{print $7}')
 
 # Connect slave to master.
-docker exec $(docker ps -q -f name=$HOST_SLAVE1) \
-		mysql -u root --password=$SLAVE1_ROOT_PASSWORD \
+docker exec $(docker ps -q -f name=$HOST_SLAVE2) \
+		mysql -u root --password=$SLAVE2_ROOT_PASSWORD \
 		--execute="SET GLOBAL time_zone = '$TIMEZONE';\
 		
 		stop slave;\
@@ -36,5 +36,5 @@ docker exec $(docker ps -q -f name=$HOST_SLAVE1) \
 		SHOW SLAVE STATUS\G;"
 
 echo
-echo The slave1 is running on port 3301
+echo The SLAVE2 is running on port 3301
 echo

@@ -72,7 +72,7 @@ nano mysql.env
 - Change proxy_monitor & super_usr password in proxysql.cnf by replacing tool
 ```
 cd /var/lib/mysql
-find -type f -exec sed -i 's/PROXY_PASSWORD/YOUR_PASSWORD/g' {} +
+find -type f -exec sed -i 's/MONITOR_PASSWORD/YOUR_PASSWORD/g' {} +
 find -type f -exec sed -i 's/SUPER_PASSWORD/YOUR_PASSWORD/g' {} +
 ```
 

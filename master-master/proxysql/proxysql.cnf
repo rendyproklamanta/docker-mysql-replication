@@ -8,7 +8,7 @@ admin_variables=
 mysql_variables =
 {
     monitor_username="proxy_monitor"
-    monitor_password="PROXY_PASSWORD"
+    monitor_password="MONITOR_PASSWORD"
     client_connect_timeout=60000
 }
 

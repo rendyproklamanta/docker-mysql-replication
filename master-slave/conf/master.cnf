@@ -1,13 +1,11 @@
 [mysqld]
 
-# These configs are mandatory, Don't change them.
-default_authentication_plugin = mysql_native_password
+# These configs are mandatory, Don't change except server-id / bind-address / port.
+default_authentication_plugin    = mysql_native_password
+log_bin_trust_function_creators  = 1
 server-id         = 0
 bind-address      = 0.0.0.0
 sql-mode          = 
-binlog-format     = mixed
-log-bin           = mysql-bin
-log_bin_trust_function_creators = 1
 relay_log         = mysql-relay-bin
 gtid_strict_mode  = 1
 read_only         = 0
@@ -15,7 +13,7 @@ read_only         = 0
 # You can add other configs below
 character-set-server    = utf8mb4
 collation-server        = utf8mb4_general_ci
-max_connections         = 1000
+max_connections         = 5000
 max_allowed_packet      = 500M
 innodb_buffer_pool_size = 2G
 wait_timeout            = 600
